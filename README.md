@@ -1,5 +1,20 @@
 # packer.nvim
 
+Exactly similar to `Packer.nvim` but exposes the hererocks bin paths to access the binaries from luarocks packages.
+
+**Getting the path to luaformat binary**
+```lua
+local rockbin = require 'packer.luarocks'.get_bin_path()
+local util = require 'packer.util'
+local luaformat = util.join_paths(rockbin, 'lua-format')
+print(luaformat)
+```
+
+**output**
+```
+>>> /home/s1n7ax/.cache/nvim/packer_hererocks/2.0.5/bin/lua-format
+```
+
 [![Gitter](https://badges.gitter.im/packer-nvim/community.svg)](https://gitter.im/packer-nvim/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 [`use-package`](https://github.com/jwiegley/use-package) inspired plugin/package management for
