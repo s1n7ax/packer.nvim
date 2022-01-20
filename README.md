@@ -308,8 +308,8 @@ The following is a more in-depth explanation of `packer`'s features and use.
 - `spec` can be a function: `packer.startup(function() use 'tjdevries/colorbuddy.vim' end)`
 - `spec` can be a table with a function as its first element and config overrides as another element:
   `packer.startup({function() use 'tjdevries/colorbuddy.vim' end, config = { ... }})`
-- `spec` can be a table with a table of plugin specifications as its first element and config overrides as another element:
- `packer.startup({{'tjdevries/colorbuddy.vim'}, config = { ... }})`
+- `spec` can be a table with a table of plugin specifications as its first element, config overrides as another element, and optional rock specifications as another element:
+ `packer.startup({{'tjdevries/colorbuddy.vim'}, config = { ... }, rocks = { ... }})`
 
 ### Custom Initialization
 You are not required to use `packer.startup` if you prefer a more manual setup with finer control
@@ -585,6 +585,8 @@ to generate the lazy-loader file!
 **NOTE:** If you use a function value for `config` or `setup` keys in any plugin specifications, it
 **must not** have any upvalues (i.e. captures). We currently use Lua's `string.dump` to compile
 config/setup functions to bytecode, which has this limitation.
+Additionally, if functions are given for these keys, the functions will be passed the plugin
+name and information table as arguments.
 
 ### User autocommands
 `packer` runs most of its operations asyncronously. If you would like to implement automations that

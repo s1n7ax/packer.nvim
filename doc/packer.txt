@@ -147,8 +147,9 @@ short, `startup` is a convenience function for simple setup, and is invoked as
     function() use 'tjdevries/colorbuddy.vim' end, config = { ... }
     })
 - `spec` can be a table with a table of plugin specifications as its first
-  element and config overrides as another element: >
-  packer.startup({{'tjdevries/colorbuddy.vim'}, config = { ... }})
+  element, config overrides as another element, and optional rock
+  specifications as another element: >
+  packer.startup({{'tjdevries/colorbuddy.vim'}, config = { ... }, rocks = { ... }})
 
 See |packer-configuration| for the allowed configuration keys.
 
@@ -259,6 +260,8 @@ CONFIGURING PLUGINS                            *packer-plugin-configuration*
 `packer` allows you to configure plugins either before they are loaded (the
 `setup` key described in |packer.use()|) or after they are loaded (the
 `config` key described in |packer.use()|).
+If functions are given for these keys, the functions will be passed the plugin
+name and information table as arguments.
 
 PLUGIN STATUSES                                 *packer-plugin-status*
 You can check whether or not a particular plugin is installed with `packer` as

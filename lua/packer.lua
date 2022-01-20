@@ -789,9 +789,7 @@ end
 packer.plugin_complete = function(lead, _, _)
   local completion_list = vim.tbl_filter(function(name)
     return vim.startswith(name, lead)
-  end, vim.tbl_keys(
-    _G.packer_plugins
-  ))
+  end, vim.tbl_keys(_G.packer_plugins))
   table.sort(completion_list)
   return completion_list
 end
@@ -807,14 +805,15 @@ packer.config = config
 --  element:
 --  packer.startup({function() use 'tjdevries/colorbuddy.vim' end, config = { ... }})
 --
---  spec can be a table with a table of plugin specifications as its first element and config
---  overrides as another element:
---  packer.startup({{'tjdevries/colorbuddy.vim'}, config = { ... }})
+--  spec can be a table with a table of plugin specifications as its first element, config overrides
+--  as another element, and an optional table of Luarocks rock specifications as another element:
+--  packer.startup({{'tjdevries/colorbuddy.vim'}, config = { ... }, rocks = { ... }})
 packer.startup = function(spec)
   local log = require_and_configure 'log'
   local user_func = nil
   local user_config = nil
   local user_plugins = nil
+  local user_rocks = nil
   if type(spec) == 'function' then
     user_func = spec
   elseif type(spec) == 'table' then
@@ -822,6 +821,7 @@ packer.startup = function(spec)
       user_func = spec[1]
     elseif type(spec[1]) == 'table' then
       user_plugins = spec[1]
+      user_rocks = spec.rocks
     else
       log.error 'You must provide a function or table of specifications as the first element of the argument to startup!'
       return
@@ -845,6 +845,9 @@ packer.startup = function(spec)
     end
   else
     packer.use(user_plugins)
+    if user_rocks then
+      packer.use_rocks(user_rocks)
+    end
   end
 
   return packer
