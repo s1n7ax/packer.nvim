@@ -38,6 +38,7 @@ local config_defaults = {
       get_bodies = 'log --color=never --pretty=format:"===COMMIT_START===%h%n%s===BODY_START===%b" --no-show-signature HEAD@{1}...HEAD',
       submodules = 'submodule update --init --recursive --progress',
       revert = 'reset --hard HEAD@{1}',
+      tags_expand_fmt = 'tag -l %s --sort -version:refname',
     },
     depth = 1,
     clone_timeout = 60,
@@ -52,12 +53,13 @@ local config_defaults = {
     done_sym = '✓',
     removed_sym = '-',
     moved_sym = '→',
+    item_sym = '•',
     header_sym = '━',
     header_lines = 2,
     title = 'packer.nvim',
     show_all_info = true,
     prompt_border = 'double',
-    keybindings = { quit = 'q', toggle_info = '<CR>', diff = 'd', prompt_revert = 'r' },
+    keybindings = { quit = 'q', toggle_info = '<CR>', diff = 'd', prompt_revert = 'r', retry = 'R' },
   },
   luarocks = { python_cmd = 'python' },
   log = { level = 'warn' },
@@ -331,8 +333,10 @@ end)
 
 --- Hook to fire events after packer compilation
 packer.on_compile_done = function()
+  local log = require_and_configure 'log'
+
   vim.cmd [[doautocmd User PackerCompileDone]]
-  vim.notify('packer.compile: Complete', vim.log.levels.INFO, { title = 'packer.nvim' })
+  log.debug 'packer.compile: Complete'
 end
 
 --- Clean operation:
